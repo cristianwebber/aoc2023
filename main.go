@@ -1,31 +1,32 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-  "flag"
 
-	"github.com/cristianwebber/aoc2023/util"
 	"github.com/cristianwebber/aoc2023/day01"
+	"github.com/cristianwebber/aoc2023/util"
 )
 
 var (
-  day int
-  part int
+	day  int
+	part int
 )
 
 func init() {
-  flag.IntVar(&day, "day", 0, "Specify the day.")
-  flag.IntVar(&part, "part", 0, "Specify the part.")
+	flag.IntVar(&day, "day", 0, "Specify the day.")
+	flag.IntVar(&part, "part", 0, "Specify the part.")
 }
 
 var funcMap = map[int]map[int]func([]string) int{
-  1: {
-    1: day01.Day01Part1,
-    2: day01.Day01Part2,
-  },
+	1: {
+		1: day01.Day01Part1,
+		2: day01.Day01Part2,
+	},
 }
+
 func main() {
-  flag.Parse()
+	flag.Parse()
 
 	if day <= 0 || part <= 0 {
 		fmt.Println("Please provide valid values for both 'day' and 'part'.")
@@ -34,11 +35,11 @@ func main() {
 
 	funcForDay, dayExists := funcMap[day]
 	if !dayExists {
-    fmt.Printf("Day %d not found.\n", day)
-    return
+		fmt.Printf("Day %d not found.\n", day)
+		return
 	}
 
-  partFunction, partExists := funcForDay[part]
+	partFunction, partExists := funcForDay[part]
 	if !partExists {
 		fmt.Printf("Part %d not found for Day %d.\n", part, day)
 		return

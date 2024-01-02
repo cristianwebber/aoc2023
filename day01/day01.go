@@ -1,8 +1,8 @@
 package day01
 
 import (
+	"strings"
 	"unicode"
-  "strings"
 )
 
 var wordToDigit = map[string]int{
@@ -23,15 +23,15 @@ func containsKey(input string, keys map[string]int) (int, bool) {
 			return value, true
 		}
 	}
-  return 0, false
+	return 0, false
 }
 
 func reverseString(input string) string {
-    runes := []rune(input)
-    for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-        runes[i], runes[j] = runes[j], runes[i]
-    }
-    return string(runes)
+	runes := []rune(input)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }
 
 func Day01Part1(lines []string) int {
@@ -56,44 +56,44 @@ func Day01Part1(lines []string) int {
 func Day01Part2(lines []string) int {
 	var total int = 0
 	for _, line := range lines {
-    var number_str string
+		var number_str string
 
-    // find first number
+		// find first number
 		for _, char := range line {
-      
+
 			if unicode.IsDigit(char) {
-        total += 10*int(char-'0')
-        break
+				total += 10 * int(char-'0')
+				break
 			}
 
-      if unicode.IsLetter(char) {
-        number_str += string(char)
-        value, found := containsKey(number_str, wordToDigit)
-        if found {
-          total += 10*value
-          break
-        }
-      }
+			if unicode.IsLetter(char) {
+				number_str += string(char)
+				value, found := containsKey(number_str, wordToDigit)
+				if found {
+					total += 10 * value
+					break
+				}
+			}
 
 		}
 
-    // find second number
-    var number_str2 string
+		// find second number
+		var number_str2 string
 		for _, char := range reverseString(line) {
-      
+
 			if unicode.IsDigit(char) {
-        total += int(char-'0')
-        break
+				total += int(char - '0')
+				break
 			}
 
-      if unicode.IsLetter(char) {
-        number_str2 = string(char) + number_str2
-        value, found := containsKey(number_str2, wordToDigit)
-        if found {
-          total += value
-          break
-        }
-      }
+			if unicode.IsLetter(char) {
+				number_str2 = string(char) + number_str2
+				value, found := containsKey(number_str2, wordToDigit)
+				if found {
+					total += value
+					break
+				}
+			}
 
 		}
 	}
