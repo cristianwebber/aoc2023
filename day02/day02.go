@@ -49,5 +49,36 @@ ThisIsDefinitelyABadPractice:
 	return total
 }
 func Day02Part2(lines []string) int {
-	return 1
+	total := 0
+	for _, line := range lines {
+		game := strings.Split(line, ": ")
+		rounds := strings.Split(game[1], "; ")
+		max_game := map[string]int{
+			"red":   0,
+			"green": 0,
+			"blue":  0,
+		}
+
+		for _, cubes := range rounds {
+			draws := strings.Split(cubes, ", ")
+			for _, color := range draws {
+				count_and_color := strings.Split(color, " ")
+				count := count_and_color[0]
+				color := count_and_color[1]
+
+				int_count, err := strconv.Atoi(count)
+				if err != nil {
+					panic(err)
+				}
+
+				if int_count > max_game[color] {
+					max_game[color] = int_count
+				}
+
+			}
+		}
+		total += max_game["red"] * max_game["blue"] * max_game["green"]
+
+	}
+	return total
 }
