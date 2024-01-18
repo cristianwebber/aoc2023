@@ -31,9 +31,18 @@ func TestDay03Part1(t *testing.T) {
 
 func TestDay03Part2(t *testing.T) {
 	input_text := `
-  xxx
+467..114..
+...*......
+..35..633.
+......#...
+617*......
+.....+.58.
+..592.....
+......755.
+...$.*....
+.664.598..
 `
-	expected := 100
+	expected := 467835
 
 	var input []string = strings.Split(input_text, "\n")
 	input = util.RemoveEmptyStrings(input)
