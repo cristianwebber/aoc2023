@@ -25,11 +25,9 @@ func stringToNumberList(input string) ([]int, error) {
 }
 
 func Part1(lines []string) int {
-	fmt.Println("hi")
 	total := 0
 	for _, line := range lines {
 		lineWinningNumbers := 0
-		fmt.Println(line)
 		game := strings.Split(line, ":")
 		// gameNumber := strings.Replace(game[0], "Card ", "", -1)
 		numbers := strings.Split(game[1], "|")
@@ -49,5 +47,45 @@ func Part1(lines []string) int {
 	return total
 }
 func Part2(lines []string) int {
-	return 1
+	var gameNumber int
+	var cardsMap = map[int]int{}
+	var err error
+
+	for _, line := range lines {
+		lineWinningNumbers := 0
+		game := strings.Split(line, ":")
+		numStr := strings.Replace(game[0], "Card ", "", -1)
+		numStr = strings.ReplaceAll(numStr, " ", "")
+		gameNumber, err = strconv.Atoi(numStr)
+		if err != nil {
+			panic(err)
+		}
+		numbers := strings.Split(game[1], "|")
+		winningNumbers, _ := stringToNumberList(numbers[0])
+		elfNumbers, _ := stringToNumberList(numbers[1])
+
+		for _, i := range elfNumbers {
+			for _, j := range winningNumbers {
+				if i == j {
+					lineWinningNumbers += 1
+				}
+			}
+		}
+
+		// add actual game
+		cardsMap[gameNumber] += 1
+
+		// add next games
+		for i := gameNumber + 1; i <= gameNumber+lineWinningNumbers; i++ {
+			cardsMap[i] += 1 * cardsMap[gameNumber]
+		}
+
+	}
+
+	fmt.Println(cardsMap)
+	total := 0
+	for i := 1; i <= gameNumber; i++ {
+		total += cardsMap[i]
+	}
+	return total
 }
