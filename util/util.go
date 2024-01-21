@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 // Remove empty string from arrays
@@ -16,6 +18,24 @@ func RemoveEmptyStrings(strarr []string) []string {
 		}
 	}
 	return arr
+}
+
+// Transform a string in a list of numbers
+func StringToNumberList(input string) ([]int, error) {
+	// Split the string into a slice of number strings
+	numberStrings := strings.Fields(input)
+
+	// Convert each number string to an integer
+	var numbers []int
+	for _, numStr := range numberStrings {
+		num, err := strconv.Atoi(numStr)
+		if err != nil {
+			return nil, err
+		}
+		numbers = append(numbers, num)
+	}
+
+	return numbers, nil
 }
 
 // Read a file and return a list of lines.
