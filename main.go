@@ -8,6 +8,7 @@ import (
 	"github.com/cristianwebber/aoc2023/day02"
 	"github.com/cristianwebber/aoc2023/day03"
 	"github.com/cristianwebber/aoc2023/day04"
+	"github.com/cristianwebber/aoc2023/day05"
 	"github.com/cristianwebber/aoc2023/util"
 )
 
@@ -37,6 +38,10 @@ var funcMap = map[int]map[int]func([]string) int{
 	4: {
 		1: day04.Part1,
 		2: day04.Part2,
+	},
+	5: {
+		1: day05.Part1,
+		2: day05.Part2,
 	},
 }
 
