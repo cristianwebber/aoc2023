@@ -8,105 +8,104 @@ import (
 
 func Part1(lines []string) int {
 	fmt.Println("hi")
-	var maps = map[string]interface{}{
-		"seedToSoil":            make(map[int]int),
-		"soilToFertilizer":      make(map[int]int),
-		"fertilizerToWater":     make(map[int]int),
-		"waterToLight":          make(map[int]int),
-		"lightToTemperature":    make(map[int]int),
-		"temperatureToHumidity": make(map[int]int),
-		"humidityToLocation":    make(map[int]int),
-	}
 
 	strNums := strings.Split(lines[0], ":")[1]
 	seeds, _ := util.StringToNumberList(strNums)
+	soil := make([]int, len(seeds))
+	fertilizer := make([]int, len(seeds))
+	water := make([]int, len(seeds))
+	light := make([]int, len(seeds))
+	temperature := make([]int, len(seeds))
+	humidity := make([]int, len(seeds))
+	location := make([]int, len(seeds))
 
-	var selectedMap string
-	for _, line := range lines[1:] {
-		switch line {
-		case "":
-			continue
-		case "seed-to-soil map:":
-			selectedMap = "seedToSoil"
-			continue
-		case "soil-to-fertilizer map:":
-			selectedMap = "soilToFertilizer"
-			continue
-		case "fertilizer-to-water map:":
-			selectedMap = "fertilizerToWater"
-			continue
-		case "water-to-light map:":
-			selectedMap = "waterToLight"
-			continue
-		case "light-to-temperature map:":
-			selectedMap = "lightToTemperature"
-			continue
-		case "temperature-to-humidity map:":
-			selectedMap = "temperatureToHumidity"
-			continue
-		case "humidity-to-location map:":
-			selectedMap = "humidityToLocation"
-			continue
-		}
+	for seedIdx, seed := range seeds {
+		var oldMap *[]int
+		var selectedMap *[]int
+		for _, line := range lines[1:] {
+			switch line {
+			case "":
+				continue
+			case "seed-to-soil map:":
+				oldMap = &seeds
+				selectedMap = &soil
+				continue
+			case "soil-to-fertilizer map:":
+				// fill seed-to-soil
+				if soil[seedIdx] == 0 {
+					soil[seedIdx] = seed
+				}
+				oldMap = &soil
+				selectedMap = &fertilizer
+				continue
+			case "fertilizer-to-water map:":
+				if fertilizer[seedIdx] == 0 {
+					fertilizer[seedIdx] = soil[seedIdx]
+				}
+				oldMap = &fertilizer
+				selectedMap = &water
+				continue
+			case "water-to-light map:":
+				if water[seedIdx] == 0 {
+					water[seedIdx] = fertilizer[seedIdx]
+				}
+				oldMap = &water
+				selectedMap = &light
+				continue
+			case "light-to-temperature map:":
+				if light[seedIdx] == 0 {
+					light[seedIdx] = water[seedIdx]
+				}
+				oldMap = &light
+				selectedMap = &temperature
+				continue
+			case "temperature-to-humidity map:":
+				if temperature[seedIdx] == 0 {
+					temperature[seedIdx] = light[seedIdx]
+				}
+				oldMap = &temperature
+				selectedMap = &humidity
+				continue
+			case "humidity-to-location map:":
+				if humidity[seedIdx] == 0 {
+					humidity[seedIdx] = temperature[seedIdx]
+				}
+				oldMap = &humidity
+				selectedMap = &location
+				continue
+			}
+			coords, _ := util.StringToNumberList(line)
+			dest := coords[0]
+			source := coords[1]
+			length := coords[2]
 
-		coords, _ := util.StringToNumberList(line)
-		dest := coords[0]
-		source := coords[1]
-		range_length := coords[2]
-		for i := 0; i < range_length; i++ {
-			mapToAdd, _ := maps[selectedMap].(map[int]int)
-			mapToAdd[source+i] = dest + i
+			if (*oldMap)[seedIdx] >= source && (*oldMap)[seedIdx] < source+length {
+				final_dest := ((*oldMap)[seedIdx] - source) + dest
+				(*selectedMap)[seedIdx] = final_dest
+			}
 		}
-
-	}
-
-	// get the final location
-	var finalLocations []int
-	for _, seed := range seeds {
-		soil, ok := maps["seedToSoil"].(map[int]int)[seed]
-		if !ok {
-			soil = seed
-		}
-		fertilizer, ok := maps["soilToFertilizer"].(map[int]int)[soil]
-		if !ok {
-			fertilizer = soil
-		}
-		water, ok := maps["fertilizerToWater"].(map[int]int)[fertilizer]
-		if !ok {
-			water = fertilizer
-		}
-		light, ok := maps["waterToLight"].(map[int]int)[water]
-		if !ok {
-			light = water
-		}
-		temperature, ok := maps["lightToTemperature"].(map[int]int)[light]
-		if !ok {
-			temperature = light
-		}
-		humidity, ok := maps["temperatureToHumidity"].(map[int]int)[temperature]
-		if !ok {
-			humidity = temperature
-		}
-		location, ok := maps["humidityToLocation"].(map[int]int)[humidity]
-		if !ok {
-			location = humidity
-		}
-
-		finalLocations = append(finalLocations, location)
-	}
-
-	minLocation := finalLocations[0]
-	for _, value := range finalLocations[1:] {
-		if value < minLocation {
-			minLocation = value
+		// add missing location
+		if location[seedIdx] == 0 {
+			location[seedIdx] = humidity[seedIdx]
 		}
 	}
+	fmt.Println("seed", seeds)
+	fmt.Println("soil", soil)
+	fmt.Println("fertilizer", fertilizer)
+	fmt.Println("water", water)
+	fmt.Println("light", light)
+	fmt.Println("temperature", temperature)
+	fmt.Println("humidity", humidity)
+	fmt.Println("location", location)
 
-	// for key, value := range maps {
-	// 	fmt.Println(key, value)
-	// }
+	minValue := location[0]
+	for _, value := range location[1:] {
+		if value < minValue {
+			minValue = value
+		}
+	}
 
-	return minLocation
+	return minValue
 }
 func Part2(lines []string) int {
 	return 1
