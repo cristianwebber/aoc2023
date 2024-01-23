@@ -108,5 +108,6 @@ func Part1(lines []string) int {
 	return minValue
 }
 func Part2(lines []string) int {
+	// Want to do it in wrong way using goroutines. Keeping it for later
 	return 1
 }
