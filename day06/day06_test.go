@@ -26,7 +26,7 @@ func TestDay06Part2(t *testing.T) {
 Time:      7  15   30
 Distance:  9  40  200
 `
-	expected := 100
+	expected := 71503
 
 	var input []string = strings.Split(input_text, "\n")
 	input = util.RemoveEmptyStrings(input)
